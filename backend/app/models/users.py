@@ -3,23 +3,27 @@
 from app import app
 from csv import DictWriter, DictReader
 from os.path import join
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def save_user(username, password):
-    with open(
-        join(app.instance_path, "app", "data", "users.py"), "a", newline=""
-    ) as csv_file:
-        write = DictWriter(csv_file, ["user", "password"])
+    if not (get_user(username, password)):
+        with open(
+            join(app.root_path, "data", "users.csv"), "a", newline=""
+        ) as csv_file:
+            write = DictWriter(csv_file, ["user", "password"])
 
-        write.writeheader()
-        write.writerow(dict(user=username, password=password))
+            write.writerow(
+                dict(user=username, password=generate_password_hash(password)))
+            return True
+    else:
+        return False
 
 
 def get_user(username, password):
     users = []
     with open(
-        join(app.instance_path, "app", "data", "users.py"), newline=""
+        join(app.root_path, "data", "users.csv"), newline=""
     ) as csv_file:
         reader = DictReader(csv_file)
         users = [user for user in reader]

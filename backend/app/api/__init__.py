@@ -1,5 +1,6 @@
 from flask_restful import Api
 from app import app
 
+api = Api(app,'/api/v1')
 
-api = Api(app)
+import app.api.v1
