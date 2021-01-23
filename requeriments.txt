@@ -1,3 +1,4 @@
 Flask
 Flask-HTTPAuth
 Flask-RESTful
+Flask-Cors
