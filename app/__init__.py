@@ -1,7 +1,7 @@
 from flask import Flask
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+from flask_cors import CORS
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 from .api import api
