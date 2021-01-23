@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 def save_user(username, password):
-    if not (get_user(username, password)):
+    if not (get_user(username)):
         with open(
             join(app.root_path, "data", "users.csv"), "a", newline=""
         ) as csv_file:
@@ -20,7 +20,7 @@ def save_user(username, password):
         return False
 
 
-def get_user(username, password):
+def get_user(username, password=''):
     users = []
     with open(
         join(app.root_path, "data", "users.csv"), newline=""
@@ -29,9 +29,9 @@ def get_user(username, password):
         users = [user for user in reader]
     if users:
         for user in users:
-            if username == user.get("user") and check_password_hash(
-                user.get("password"), password
-            ):
+            if username == user.get("user") and (
+                    check_password_hash(user.get("password"), password)
+                    if len(password) > 0 else True):
                 return True
     else:
         return False
